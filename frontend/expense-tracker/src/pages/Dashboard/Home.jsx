@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useUserAuth } from "../../hooks/useUserAuth";
 import { useNavigate } from "react-router-dom";
+import { API_PATHS } from "../../utils/apiPaths";
 import axiosInstance from "../../utils/axiosInstance";
 
 const Home = () => {
     useUserAuth();
-    
+
     const navigate = useNavigate();
 
     const [dashboardData, setDashboardData] = useState(null);
@@ -17,20 +18,26 @@ const Home = () => {
 
         setLoading(true);
 
-        try{
+        try {
             const response = await axiosInstance.get(
-                '${API_PATHS.DASHBOARD.GET_DATA}'
+                `${API_PATHS.DASHBOARD.GET_DATA}`
             );
 
             if (response.data) {
                 setDashboardData(response.data);
             }
-        } catch(error) {
+        } catch (error) {
             console.log("something went wrong. Please try again.", error);
         } finally {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        fetchDashboardData();
+        return () => { };
+    }, []);
+
     return (
         <DashboardLayout activeMenu="Dashboard">
             <div className="my-5 mx-auto">Home</div>
