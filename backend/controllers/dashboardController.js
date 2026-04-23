@@ -10,20 +10,20 @@ exports.getDashboardData = async (req, res) => {
 
         // Fetch total income & expenses
         const totalIncome = await Income.aggregate([
-            { $match: { user: userObjectId } },
+            { $match: { userId: userObjectId } },
             { $group: { _id: null, total: { $sum: "$amount" } } },
         ]);
 
         console.log("totalIncome", { totalIncome, userId: isValidObjectId(userId) });
 
         const totalExpenses = await Expense.aggregate([
-            { $match: { user: userObjectId } },
+            { $match: { userId: userObjectId } },
             { $group: { _id: null, total: { $sum: "$amount" } } },
         ]);
 
         // Get Income transactions in the last 60 days
         const last60DaysIncomeTransactions = await Income.find({
-            user: userObjectId,
+            userId: userObjectId,
             date: { $gte: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000) },
         }).sort({ date: -1 });
 
@@ -35,7 +35,7 @@ exports.getDashboardData = async (req, res) => {
 
         // Get Expense transactions in the last 30 days
         const last30DaysExpenseTransactions = await Expense.find({
-            user: userObjectId,
+            userId: userObjectId,
             date: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
         }).sort({ date: -1 });
 
@@ -47,10 +47,10 @@ exports.getDashboardData = async (req, res) => {
 
         // Fetch last 5 transactions (income + expenses)
         const lastTransactions = [
-            ...(await Income.find({ user: userObjectId }).sort({ date: -1 }).limit(5)).map(
+            ...(await Income.find({ userId: userObjectId }).sort({ date: -1 }).limit(5)).map(
                 (txn) => ({ ...txn.toObject(), type: "income", })
             ),
-            ...(await Expense.find({ user: userObjectId }).sort({ date: -1 }).limit(5)).map(
+            ...(await Expense.find({ userId: userObjectId }).sort({ date: -1 }).limit(5)).map(
                 (txn) => ({ ...txn.toObject(), type: "expense", })
             ),
         ].sort((a, b) => b.date - a.date); // Sort latest first
