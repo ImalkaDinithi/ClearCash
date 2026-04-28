@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Modal = ({ childern, isOpen, onClose, title }) => {
+const Modal = ({ children, isOpen, onClose, title }) => {
 
     if (!isOpen) return null
 
@@ -8,7 +8,7 @@ const Modal = ({ childern, isOpen, onClose, title }) => {
         <div className="relative p-4 w-full max-w-2xl max-h-full">
             {/* {Modal content} */}
             <div className="relative bg-white rounded-lg shadow-sm dark-bg-gray-700">
-                
+
                 {/* {Modal header} */}
 
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
@@ -41,7 +41,7 @@ const Modal = ({ childern, isOpen, onClose, title }) => {
 
                 {/* {Modal body} */}
                 <div className="p-4 md:p-5 space-y-4">
-                    {childern}
+                    {children}
                 </div>
             </div>
         </div>
