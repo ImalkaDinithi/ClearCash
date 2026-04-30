@@ -4,6 +4,9 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 
 import { API_PATHS } from "../../utils/apiPaths";
 import axiosInstance from "../../utils/axiosInstance";
+import ExpenseOverview from "../../components/Expense/ExpenseOverview";
+import Modal from "../../components/Modal";
+import AddExpenseForm from "../../components/Expense/AddExpenseForm";
 
 const Expense = () => {
     useUserAuth();
@@ -86,6 +89,22 @@ const Expense = () => {
     return (
         <DashboardLayout activeMenu="Expense">
             <div className="my-5 mx-auto">
+                <div className="grid grid-cols-1 gap-6">
+                    <div className="">
+                        <ExpenseOverview
+                            transactions={expenseData}
+                            onAddExpense={() => setOpenAddExpenseModal(true)}
+                        />
+                    </div>
+                </div>
+
+                <Modal
+                    isOpen={openAddExpenseModal}
+                    onClose={() => setOpenAddExpenseModal(false)}
+                    title="Add Expense"
+                >
+                    <AddExpenseForm onAddExpense={handleAddExpense} />
+                </Modal>
 
             </div>
         </DashboardLayout>
