@@ -1,5 +1,0 @@
-MongoDB connection
-
-imalkadinithi2003_db_user
-
-pw- aoP3FbnUZYaQlRro
