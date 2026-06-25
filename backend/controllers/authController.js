@@ -30,9 +30,12 @@ exports.registerUser = async (req, res) => {
             profileImageUrl,
         });
 
+        const userData = user.toObject();
+        delete userData.password;
+
         res.status(201).json({
             _id: user._id,
-            user,
+            user: userData,
             token: generateToken(user._id),
         });
 
@@ -53,16 +56,19 @@ exports.loginUser = async (req, res) => {
     }
     try {
         const user = await User.findOne({ email });
-        if (!user) {
-            return  res.status(400).json({ message: "Invalid credentials" });
+        if (!user || !(await user.comparePassword(password))) {
+            return res.status(400).json({ message: "Invalid credentials" });
         }
+
+        const userData = user.toObject();
+        delete userData.password;
 
         res.status(200).json({
             id: user._id,
-            user,
+            user: userData,
             token: generateToken(user._id),
         });
-    }catch (error) {
+    } catch (error) {
         console.error("Login Error:", error.message);
         res.status(500).json({
             message: "Error login User",
